@@ -1,0 +1,43 @@
+/* src/Components/VendorLogin/VendorLogin.css */
+
+.Admin-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #b8cfe7;
+}
+
+.adminmainlogin {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.Admin-form {
+  margin-bottom: 1rem;
+}
+
+.Adminform1 {
+  margin-bottom: 1rem;
+}
+
+.Adminbtn {
+  width: 100%;
+  background-color: #a623c48d;
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 5rem;
+  cursor: pointer;
+}
+
+.Adminbtn:hover {
+  background-color: #0056b3;
+}
+
+.Adminouter {
+  margin-top: 1rem;
+  color: #6c757d;
+}
