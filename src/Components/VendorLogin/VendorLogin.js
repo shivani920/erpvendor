@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Modal, Button } from "react-bootstrap"; // Import Modal and Button
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./VendorLogin.css";
@@ -9,7 +10,16 @@ const VendorLogin = () => {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      navigate("/dashboard"); // Redirect to dashboard if already logged in
+    }
+  }, [navigate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -35,12 +45,23 @@ const VendorLogin = () => {
         if (errorData.password) {
           setPasswordError(errorData.password);
         }
+        setModalContent("Vendor Login failed");
+        setShowModal(true);
         throw new Error("Vendor Login failed");
       }
 
       const responseData = await response.json();
       console.log("Vendor Login successful:", responseData);
-      navigate("/dashboard");
+
+      // Save the authentication token in local storage
+      localStorage.setItem("authToken", responseData.token);
+
+      setModalContent("Vendor Login successful");
+      setShowModal(true);
+      setTimeout(() => {
+        setShowModal(false);
+        navigate("/dashboard");
+      }, 2000); // Redirect to dashboard after 2 seconds
     } catch (error) {
       console.error("Vendor Login error:", error);
     }
@@ -107,6 +128,18 @@ const VendorLogin = () => {
           </div>
         </div>
       </div>
+
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Notification</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{modalContent}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

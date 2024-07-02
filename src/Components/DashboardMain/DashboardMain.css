@@ -72,3 +72,14 @@
     flex-grow: 0;
   }
 }
+.btn {
+  background-color: #495057;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+}
+.btn:hover {
+  background-color: white;
+  color: black;
+}
