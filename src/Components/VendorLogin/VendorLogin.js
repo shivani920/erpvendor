@@ -29,7 +29,7 @@ const VendorLogin = () => {
     const data = { email, password };
 
     try {
-      const response = await fetch("http://13.201.136.34:8000/vendor/login/", {
+      const response = await fetch("/api/vendor/login/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
