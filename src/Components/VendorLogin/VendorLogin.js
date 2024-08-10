@@ -4,6 +4,7 @@ import { Modal, Button } from "react-bootstrap"; // Import Modal and Button
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./VendorLogin.css";
+import { loginVendor } from "../../services/Api.jsx";
 
 const VendorLogin = () => {
   const [email, setEmail] = useState("");
@@ -29,32 +30,14 @@ const VendorLogin = () => {
     const data = { email, password };
 
     try {
-      const response = await fetch("/api/vendor/login/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const responseData = await loginVendor(data);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        if (errorData.email) {
-          setEmailError(errorData.email);
-        }
-        if (errorData.password) {
-          setPasswordError(errorData.password);
-        }
-        setModalContent("Vendor Login failed");
-        setShowModal(true);
-        throw new Error("Vendor Login failed");
-      }
-
-      const responseData = await response.json();
       console.log("Vendor Login successful:", responseData);
+      const { token } = responseData;
 
       // Save the authentication token in local storage
-      localStorage.setItem("authToken", responseData.token);
+      localStorage.setItem("refreshToken", token.refresh);
+      localStorage.setItem("authToken", responseData.token.access);
 
       setModalContent("Vendor Login successful");
       setShowModal(true);
@@ -63,6 +46,15 @@ const VendorLogin = () => {
         navigate("/dashboard");
       }, 2000); // Redirect to dashboard after 2 seconds
     } catch (error) {
+      const errorData = JSON.parse(error.message);
+      if (errorData.email) {
+        setEmailError(errorData.email);
+      }
+      if (errorData.password) {
+        setPasswordError(errorData.password);
+      }
+      setModalContent("Vendor Login failed");
+      setShowModal(true);
       console.error("Vendor Login error:", error);
     }
   };

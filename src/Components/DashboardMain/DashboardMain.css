@@ -83,3 +83,10 @@
   background-color: white;
   color: black;
 }
+.tabs-container {
+  padding: 20px;
+}
+
+.tab-content {
+  padding: 20px;
+}
